@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Apple 27 Widget style: รายการเว็บไซต์ 50 เว็บที่จะสร้าง">
+<meta name="theme-color" content="#e8ebf3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#07070b" media="(prefers-color-scheme: dark)">
+<title>Apple 27 Widget · 50 เว็บไซต์ที่จะสร้าง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #e8ebf3;
+    --glass: rgba(255, 255, 255, 0.58);
+    --glass-strong: rgba(255, 255, 255, 0.82);
+    --stroke: rgba(255, 255, 255, 0.72);
+    --stroke-soft: rgba(60, 60, 67, 0.14);
+    --text: #1d1d1f;
+    --muted: #6e6e78;
+    --ink: #1d1d1f;
+    --on-ink: #ffffff;
+    --accent: #0a84ff;
+    --shadow: rgba(40, 50, 90, 0.28);
+    --blob-opacity: 0.75;
+    --r-l: 28px;
+    --r-m: 24px;
+    --r-s: 20px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-base: #07070b;
+      --glass: rgba(44, 44, 50, 0.55);
+      --glass-strong: rgba(64, 64, 72, 0.8);
+      --stroke: rgba(255, 255, 255, 0.12);
+      --stroke-soft: rgba(255, 255, 255, 0.16);
+      --text: #f5f5f7;
+      --muted: #a1a1aa;
+      --ink: #f5f5f7;
+      --on-ink: #000000;
+      --accent: #0a84ff;
+      --shadow: rgba(0, 0, 0, 0.6);
+      --blob-opacity: 0.4;
+    }
+  }
+
+  /* Category tints: --c1 (top) and --c2 (deep) */
+  .card[data-cat="food"]       { --c1: #ffb340; --c2: #ff7a1a; }
+  .card[data-cat="health"]     { --c1: #5de0a8; --c2: #12a36b; }
+  .card[data-cat="edu"]        { --c1: #8ea8ff; --c2: #3d5afe; }
+  .card[data-cat="travel"]     { --c1: #7fd8ff; --c2: #1e9be0; }
+  .card[data-cat="estate"]     { --c1: #7af0e6; --c2: #0e9f94; }
+  .card[data-cat="shop"]       { --c1: #ff8fc1; --c2: #ff3d7f; }
+  .card[data-cat="portfolio"]  { --c1: #c59bff; --c2: #8a4dff; }
+  .card[data-cat="finance"]    { --c1: #ffe066; --c2: #f0a500; }
+  .card[data-cat="events"]     { --c1: #ff7b7b; --c2: #e0313b; }
+  .card[data-cat="services"]   { --c1: #d4a373; --c2: #9c6b3c; }
+  .card[data-cat="saas"]       { --c1: #b5f36b; --c2: #5fa81d; }
+  .card[data-cat="community"]  { --c1: #ff9e8a; --c2: #e0573f; }
+  .card[data-cat="game"]       { --c1: #ff6ad5; --c2: #c2189b; }
+  .card[data-cat="business"]   { --c1: #5b6372; --c2: #7a8496; }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans Thai", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg-base);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* Wallpaper: soft drifting color blobs, like the Apple wallpaper */
+  .wallpaper {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: var(--bg-base);
+  }
+  .wallpaper span {
+    position: absolute;
+    width: 56vmax;
+    height: 56vmax;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: var(--blob-opacity);
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+  .wallpaper span:nth-child(1) { background: #ff6b9d; top: -22vmax; left: -12vmax; }
+  .wallpaper span:nth-child(2) { background: #5ac8fa; bottom: -28vmax; right: -16vmax; animation-duration: 32s; }
+  .wallpaper span:nth-child(3) { background: #bf5af2; top: 28%; left: 38%; opacity: calc(var(--blob-opacity) * 0.6); animation-duration: 21s; }
+
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to   { transform: translate3d(4vmax, -3vmax, 0) scale(1.08); }
+  }
+
+  /* Shared widget surface */
+  .widget {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--stroke);
+    box-shadow: 0 12px 32px -14px var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 32px 16px 56px;
+  }
+
+  /* Header */
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .eyebrow {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 4.2vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+  }
+
+  .clock {
+    padding: 14px 22px;
+    border-radius: var(--r-m);
+    text-align: right;
+    min-width: 180px;
+  }
+  .clock-time {
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .clock-date {
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* Stat widgets */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat {
+    padding: 18px 20px;
+    border-radius: var(--r-m);
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .stat.m {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+  }
+  .stat-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .stat-value {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .ring {
+    position: relative;
+    flex: 0 0 88px;
+    width: 88px;
+    height: 88px;
+  }
+  .ring svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .ring circle {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+  }
+  .ring-bg { stroke: var(--stroke-soft); }
+  .ring-fg {
+    stroke: var(--accent);
+    stroke-dasharray: 226.19;
+    stroke-dashoffset: 226.19;
+    transition: stroke-dashoffset 0.5s ease;
+  }
+  .ring-text {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Toolbar: search + category chips */
+  .toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    box-shadow: 0 8px 24px -14px var(--shadow);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+  }
+  .search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 16px; /* 16px stops iOS from zooming on focus */
+    outline: none;
+  }
+  .search input::placeholder { color: var(--muted); }
+
+  .chips {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px 8px;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    background: var(--glass);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transition: background 0.2s, color 0.2s;
+  }
+  .chip-n {
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--on-ink);
+    border-color: transparent;
+  }
+  .chip[aria-pressed="true"] .chip-n { color: inherit; opacity: 0.7; }
+
+  /* Widget grid: 1x1 small, 2x1 medium, 2x2 large */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 184px;
+    grid-auto-flow: dense;
+    gap: 14px;
+  }
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    min-width: 0;
+    border-radius: var(--r-m);
+    overflow: hidden;
+    background:
+      linear-gradient(160deg, color-mix(in srgb, var(--c1) 16%, transparent), transparent 60%),
+      var(--glass);
+    animation: pop 0.35s ease both;
+  }
+  .card.m { grid-column: span 2; }
+  .card.l {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 22px;
+    border-radius: var(--r-l);
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @media (hover: hover) {
+    .card { transition: transform 0.25s ease; }
+    .card:hover { transform: translateY(-2px); }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    line-height: 1;
+    border-radius: 13px;
+    background: linear-gradient(145deg, var(--c1), var(--c2));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 8px 16px -8px var(--c2);
+  }
+  .card.l .icon {
+    width: 68px;
+    height: 68px;
+    flex-basis: 68px;
+    font-size: 36px;
+    border-radius: 20px;
+  }
+  .card-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .index {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .check {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid var(--stroke-soft);
+    background: var(--glass-strong);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .check::after {
+    content: "";
+    width: 7px;
+    height: 13px;
+    border: solid #fff;
+    border-width: 0 2.5px 2.5px 0;
+    transform: translateY(-1px) rotate(45deg) scale(0);
+    transition: transform 0.2s;
+  }
+  .check[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check[aria-pressed="true"]::after { transform: translateY(-1px) rotate(45deg) scale(1); }
+
+  .card-body { min-width: 0; }
+  .kind {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c2);
+  }
+  .card h2 {
+    margin: 3px 0 4px;
+    font-size: 17px;
+    font-weight: 650;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  .card.l h2 { font-size: 26px; margin-top: 6px; }
+  .card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card.l p {
+    font-size: 16px;
+    -webkit-line-clamp: 4;
+  }
+  .card.done .icon { opacity: 0.5; filter: saturate(0.4); }
+  .card.done h2 {
+    text-decoration: line-through;
+    text-decoration-color: var(--muted);
+    color: var(--muted);
+  }
+
+  .empty {
+    margin: 32px 0;
+    text-align: center;
+    color: var(--muted);
+  }
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* Tablet and phone */
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 24px 16px 48px; }
+    .clock { text-align: left; min-width: 0; width: 100%; }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .stat { min-height: 124px; padding: 16px; }
+    .stat-value { font-size: 36px; }
+    .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 176px; gap: 12px; }
+    .card { padding: 14px; }
+    .card .icon { width: 40px; height: 40px; flex-basis: 40px; font-size: 22px; }
+    .card.l { padding: 18px; }
+    .card.l .icon { width: 60px; height: 60px; flex-basis: 60px; font-size: 32px; }
+    .card.l h2 { font-size: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="wallpaper" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<main class="wrap">
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Apple 27 Widget</p>
+      <h1>50 เว็บไซต์ที่จะสร้าง</h1>
+    </div>
+    <div class="clock widget" aria-label="เวลาปัจจุบัน">
+      <div class="clock-time" id="clock-time">--:--</div>
+      <div class="clock-date" id="clock-date"></div>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="สรุปความคืบหน้า">
+    <div class="widget stat">
+      <span class="stat-label">ทั้งหมด</span>
+      <div>
+        <span class="stat-value" id="stat-total">50</span>
+        <span class="stat-sub">เว็บไซต์</span>
+      </div>
+    </div>
+    <div class="widget stat">
+      <span class="stat-label">สร้างแล้ว</span>
+      <div>
+        <span class="stat-value" id="stat-done">0</span>
+        <span class="stat-sub" id="stat-done-sub">จาก 50</span>
+      </div>
+    </div>
+    <div class="widget stat m">
+      <div class="ring">
+        <svg viewBox="0 0 88 88" aria-hidden="true">
+          <circle class="ring-bg" cx="44" cy="44" r="36"></circle>
+          <circle class="ring-fg" id="ring-fg" cx="44" cy="44" r="36"></circle>
+        </svg>
+        <span class="ring-text" id="ring-text">0%</span>
+      </div>
+      <div>
+        <span class="stat-label">ความคืบหน้า</span>
+        <span class="stat-sub" id="stat-msg">ติ๊กเมื่อสร้างเว็บนั้นเสร็จ</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <label class="search widget">
+      <span aria-hidden="true">🔍</span>
+      <input type="search" id="q" placeholder="ค้นหาเว็บไซต์ เช่น คาเฟ่ ร้านค้า แดชบอร์ด" autocomplete="off" aria-label="ค้นหาเว็บไซต์">
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="กรองตามหมวดหมู่"></div>
+  </section>
+
+  <section class="grid" id="grid" aria-live="polite"></section>
+  <p class="empty" id="empty" hidden>ไม่พบเว็บไซต์ที่ตรงกับคำค้นหา</p>
+
+  <footer>Apple 27 Widget · ความคืบหน้าถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น</footer>
+</main>
+
+<script>
+(() => {
+  // [name, kind (Thai), desc, category, emoji, size: s | m | l]
+  const RAW = [
+    ["Ember & Oak", "คาเฟ่", "เมนูดิจิทัล จองโต๊ะ และสั่งล่วงหน้า", "food", "☕", "l"],
+    ["Hearth Kitchen", "ร้านอาหารครัวบ้านสวน", "แคตตาล็อกเมนู รีวิว และแผนที่สาขา", "food", "🥘", "s"],
+    ["Crumb Lab", "เบเกอรี่", "สั่งเค้กออนไลน์ ปฏิทินรับออเดอร์", "food", "🎂", "s"],
+    ["Smile Hub", "คลินิกทันตกรรม", "นัดหมายออนไลน์ และประวัติการรักษา", "health", "🦷", "m"],
+    ["Move Well", "คลินิกกายภาพบำบัด", "จองคิว และโปรแกรมออกกำลังกายที่บ้าน", "health", "🤸", "s"],
+    ["Pulse Gym", "ฟิตเนส", "แพ็กเกจสมาชิก ตารางคลาสสด", "health", "🏋️", "s"],
+    ["Bright Path", "ศูนย์กวดวิชา", "ลงทะเบียนคอร์ส ดูตารางเรียน", "edu", "📘", "s"],
+    ["Lingo Bloom", "คอร์สภาษาอังกฤษ", "บทเรียนสั้นรายวัน และทดสอบระดับ", "edu", "🗣️", "s"],
+    ["Tune Room", "ห้องเรียนดนตรี", "จองคลาสเปียโนและกีตาร์", "edu", "🎹", "s"],
+    ["Trail Go", "บริษัททัวร์", "แพ็กเกจทัวร์ และปฏิทินวันว่าง", "travel", "🥾", "m"],
+    ["Riverside Nest", "โฮมสเตย์", "ห้องพัก แผนที่ และจองตรงกับเจ้าของ", "travel", "🏡", "s"],
+    ["Keystone Homes", "นายหน้าอสังหาฯ", "ค้นหาบ้านด้วยตัวกรองราคาและทำเล", "estate", "🔑", "s"],
+    ["Lofty Stay", "คอนโดให้เช่า", "รายการห้องเช่า และนัดชมห้อง", "estate", "🏢", "s"],
+    ["Petal & Thread", "ร้านดอกไม้", "สั่งช่อดอกไม้ และส่งด่วนในเมือง", "shop", "💐", "s"],
+    ["Second Thread", "เสื้อผ้ามือสอง", "หน้าร้านออนไลน์ จัดสต็อกง่าย", "shop", "👗", "s"],
+    ["Pak Kong Gift", "ร้านของฝาก", "ตะกร้าสินค้า และแพ็กของขวัญ", "shop", "🎁", "s"],
+    ["Trail Gear", "อุปกรณ์แคมป์", "แคตตาล็อกอุปกรณ์ พร้อมรีวิวผู้ใช้", "shop", "⛺", "s"],
+    ["Page Corner", "ร้านหนังสือ", "ค้นหาหนังสือ และจองล่วงหน้า", "shop", "📚", "s"],
+    ["Dew Lab", "แบรนด์สกินแคร์", "ส่วนผสม รีวิว และแพ็กเกจทดลอง", "health", "🧴", "s"],
+    ["Frame Studio", "สตูดิโอถ่ายภาพ", "จองแพ็กเกจถ่ายภาพ และแกลเลอรี", "portfolio", "📷", "m"],
+    ["Nova Design", "พอร์ตโฟลิโอนักออกแบบ", "เคสงานเด่น กระบวนการ และติดต่อ", "portfolio", "✏️", "s"],
+    ["Byte Notes", "พอร์ตโฟลิโอนักพัฒนา", "โปรเจกต์โอเพนซอร์ส และบล็อกเทคนิค", "portfolio", "💻", "s"],
+    ["Lumen", "พอร์ตโฟลิโอช่างภาพ", "แกลเลอรีแนวตั้งแบบเต็มจอ", "portfolio", "🌅", "s"],
+    ["Coin Diary", "บล็อกการเงินส่วนบุคคล", "บทความออมเงิน และการลงทุนเบื้องต้น", "finance", "🪙", "s"],
+    ["Tax Snap", "เครื่องคิดเลขภาษี", "คำนวณภาษีเงินได้บุคคลธรรมดา", "finance", "🧾", "s"],
+    ["Loan Lens", "คำนวณสินเชื่อ", "ผ่อนชำระ และเปรียบเทียบดอกเบี้ย", "finance", "💳", "s"],
+    ["Unit Shift", "แปลงหน่วย", "แปลงหน่วยหลายประเภทในหน้าเดียว", "finance", "📏", "s"],
+    ["Ledger Cat", "บันทึกรายรับรายจ่าย", "PWA ใช้ได้ออฟไลน์ สรุปรายเดือน", "finance", "📒", "s"],
+    ["Forever Day", "เว็บงานแต่งงาน", "RSVP แผนที่งาน และอัลบั้มภาพ", "events", "💒", "m"],
+    ["Spark Event", "หน้าอีเวนต์", "ลงทะเบียนผู้เข้าร่วม และนับถอยหลัง", "events", "🎈", "s"],
+    ["Stage Pass", "จองบัตรคอนเสิร์ต", "ผังที่นั่งแบบโต้ตอบ เลือกโซนได้", "events", "🎫", "s"],
+    ["Gather Hall", "เว็บินาร์ออนไลน์", "ปฏิทินงาน ลงทะเบียน และลิงก์ห้อง", "events", "🎙️", "s"],
+    ["Clause & Co.", "สำนักงานกฎหมาย", "บริการกฎหมาย และนัดปรึกษาออนไลน์", "services", "⚖️", "s"],
+    ["Ledger Partners", "สำนักงานบัญชี", "แพ็กเกจรายปี และยื่นภาษีให้", "services", "📑", "s"],
+    ["Fix Ready", "ช่างซ่อมบ้าน", "เรียกช่างใกล้บ้าน และประเมินราคา", "services", "🔧", "s"],
+    ["Fresh Fold", "ซักรีดรับส่ง", "แพ็กเกจซักรีด และติดตามออเดอร์", "services", "🧺", "s"],
+    ["Drive Rent", "รถเช่า", "รถให้เช่า และปฏิทินการจอง", "services", "🚗", "s"],
+    ["Cool Care", "ล้างแอร์", "นัดล้างแอร์ และใบเสนอราคาทันที", "services", "❄️", "s"],
+    ["Room Sync", "จองห้องประชุม", "ดูห้องว่างและจองได้ทันที", "saas", "🗓️", "s"],
+    ["Queue Flow", "ระบบจัดคิว", "คิวหน้าร้าน แจ้งเตือนผ่านมือถือ", "saas", "🔢", "s"],
+    ["Sales Pulse", "แดชบอร์ดยอดขาย", "KPI รายวัน กราฟแนวโน้มและรายงาน", "saas", "📈", "m"],
+    ["Stock Lens", "ตรวจสต็อก", "ติดตามสต็อก และแจ้งเตือนของใกล้หมด", "saas", "📦", "s"],
+    ["Learn Loop", "แพลตฟอร์มคอร์สวิดีโอ", "บทเรียนวิดีโอ ใบประกาศ และความคืบหน้า", "edu", "🎓", "s"],
+    ["Paw Club", "ชุมชนคนรักสัตว์", "บล็อก ศูนย์รับเลี้ยง และกิจกรรม", "community", "🐾", "s"],
+    ["Pantry Notes", "บล็อกสูตรอาหาร", "สูตรอาหารพร้อมตัวกรองวัตถุดิบ", "community", "🍳", "s"],
+    ["Field Journal", "นิตยสารออนไลน์", "บทความแบ่งหมวด และอ่านต่อได้ง่าย", "community", "📰", "s"],
+    ["Daily Spin", "วงล้อสุ่มรางวัล", "เกมโปรโมชันรายวัน ลุ้นรางวัลทุกวัน", "game", "🎡", "s"],
+    ["Word Hunt", "เกมทายคำไทย", "ปริศนาคำศัพท์ เล่นได้ทุกวัน", "game", "🔤", "s"],
+    ["Neighbor Hub", "กิจกรรมชุมชน", "ประกาศในชุมชน และปฏิทินกิจกรรม", "community", "🏘️", "s"],
+    ["Launch Page", "หน้าแรกสตาร์ตอัป", "หน้า pitch พร้อมฟอร์ม waitlist", "business", "🚀", "l"],
+  ];
+
+  const CATS = {
+    food:      { label: "อาหารและกาแฟ",      icon: "🍽️" },
+    health:    { label: "สุขภาพและความงาม",  icon: "🩺" },
+    edu:       { label: "การศึกษา",           icon: "📚" },
+    travel:    { label: "ท่องเที่ยว",         icon: "🧳" },
+    estate:    { label: "อสังหาริมทรัพย์",    icon: "🏠" },
+    shop:      { label: "ร้านค้า",            icon: "🛍️" },
+    portfolio: { label: "พอร์ตโฟลิโอ",        icon: "🎨" },
+    finance:   { label: "การเงิน",            icon: "🧮" },
+    events:    { label: "อีเวนต์",            icon: "🎉" },
+    services:  { label: "บริการและกฎหมาย",    icon: "⚖️" },
+    saas:      { label: "ระบบและแดชบอร์ด",    icon: "📊" },
+    community: { label: "ชุมชนและบล็อก",      icon: "💬" },
+    game:      { label: "เกม",                icon: "🎮" },
+    business:  { label: "ธุรกิจ",             icon: "🚀" },
+  };
+
+  const SITES = RAW.map(([name, kind, desc, cat, icon, size], i) => ({
+    no: String(i + 1).padStart(2, "0"),
+    id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    name, kind, desc, cat, icon, size,
+  }));
+  const TOTAL = SITES.length;
+
+  const KEY = "apple27-sites-done";
+  const RING_C = 2 * Math.PI * 36;
+
+  const $ = (id) => document.getElementById(id);
+  const grid = $("grid");
+  const chips = $("chips");
+  const empty = $("empty");
+  const search = $("q");
+
+  let filter = "all";
+  let query = "";
+  let doneSet = loadDone();
+
+  function esc(value) {
+    return String(value).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function loadDone() {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(KEY) || "[]"));
+    } catch {
+      return new Set();
+    }
+  }
+
+  function saveDone() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify([...doneSet]));
+    } catch {
+      /* storage blocked: progress just lives for this visit */
+    }
+  }
+
+  function tick() {
+    const now = new Date();
+    $("clock-time").textContent = now.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" });
+    $("clock-date").textContent = now.toLocaleDateString("th-TH", { weekday: "long", day: "numeric", month: "long" });
+  }
+
+  function renderChips() {
+    const counts = {};
+    SITES.forEach((s) => { counts[s.cat] = (counts[s.cat] || 0) + 1; });
+    const items = [["all", "ทั้งหมด", "✨", TOTAL]].concat(
+      Object.keys(CATS).map((k) => [k, CATS[k].label, CATS[k].icon, counts[k] || 0])
+    );
+    chips.innerHTML = items.map(([key, label, icon, n]) =>
+      `<button type="button" class="chip" data-filter="${key}" aria-pressed="${filter === key}">` +
+      `<span aria-hidden="true">${icon}</span>${esc(label)} <span class="chip-n">${n}</span></button>`
+    ).join("");
+  }
+
+  function cardHTML(s) {
+    const done = doneSet.has(s.id);
+    return `<article class="widget card ${s.size}${done ? " done" : ""}" data-cat="${s.cat}" data-id="${s.id}">` +
+      `<div class="card-top">` +
+        `<span class="icon" aria-hidden="true">${s.icon}</span>` +
+        `<div class="card-tools">` +
+          `<span class="index">${s.no}</span>` +
+          `<button type="button" class="check" aria-pressed="${done}" aria-label="ทำเครื่องหมายว่า ${esc(s.name)} สร้างแล้ว"></button>` +
+        `</div>` +
+      `</div>` +
+      `<div class="card-body">` +
+        `<span class="kind">${esc(s.kind)}</span>` +
+        `<h2>${esc(s.name)}</h2>` +
+        `<p>${esc(s.desc)}</p>` +
+      `</div>` +
+    `</article>`;
+  }
+
+  function renderGrid() {
+    const list = SITES.filter((s) => {
+      if (filter !== "all" && s.cat !== filter) return false;
+      if (!query) return true;
+      const haystack = `${s.name} ${s.kind} ${s.desc} ${CATS[s.cat].label}`.toLowerCase();
+      return haystack.includes(query);
+    });
+    grid.innerHTML = list.map(cardHTML).join("");
+    empty.hidden = list.length > 0;
+  }
+
+  function updateStats() {
+    const n = SITES.filter((s) => doneSet.has(s.id)).length;
+    const pct = Math.round((n / TOTAL) * 100);
+    $("stat-done").textContent = n;
+    $("stat-done-sub").textContent = `จาก ${TOTAL}`;
+    $("ring-fg").style.strokeDashoffset = RING_C * (1 - n / TOTAL);
+    $("ring-text").textContent = `${pct}%`;
+    $("stat-msg").textContent =
+      n === 0 ? "ติ๊กเมื่อสร้างเว็บนั้นเสร็จ" :
+      n === TOTAL ? "ครบทั้ง 50 เว็บแล้ว 🎉" :
+      `เหลืออีก ${TOTAL - n} เว็บ`;
+  }
+
+  chips.addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    filter = btn.dataset.filter;
+    renderChips();
+    renderGrid();
+  });
+
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".check");
+    if (!btn) return;
+    const card = btn.closest(".card");
+    const id = card.dataset.id;
+    const on = !doneSet.has(id);
+    if (on) doneSet.add(id); else doneSet.delete(id);
+    saveDone();
+    btn.setAttribute("aria-pressed", String(on));
+    card.classList.toggle("done", on);
+    updateStats();
+  });
+
+  search.addEventListener("input", (e) => {
+    query = e.target.value.trim().toLowerCase();
+    renderGrid();
+  });
+
+  tick();
+  setInterval(tick, 15000);
+  renderChips();
+  renderGrid();
+  updateStats();
+})();
+</script>
+</body>
+</html>
